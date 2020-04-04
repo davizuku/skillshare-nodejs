@@ -31,6 +31,7 @@ var server = http.createServer(function (req, res) {
             statusCode = typeof(statusCode) !== 'undefined' ? statusCode : 200;
             payload = typeof(payload) === 'object' ? payload : {};
             var payloadString = JSON.stringify(payload);
+            res.setHeader('Content-Type', 'application/json');
             res.writeHead(statusCode);
             res.end(payloadString);
             console.log({
