@@ -1,6 +1,7 @@
 
 const http = require('http');
 const url = require('url');
+const StringDecoder = require('string_decoder').StringDecoder;
 
 var server = http.createServer(function (req, res) {
     var parsedUrl = url.parse(req.url, true);
@@ -9,13 +10,21 @@ var server = http.createServer(function (req, res) {
     var method = req.method.toLowerCase();
     var queryStringObject = parsedUrl.query; // This is available due to second parameter in url.parse
     var headers = req.headers
-
-
-    res.end("Hello World\n");
-
-    console.log('Request received on path: ' + trimmedPath + ' with method: ' + method);
-    console.log('Query string: ', queryStringObject);
-    console.log('Headers: ', headers);
+    var decoder = new StringDecoder('utf-8');
+    var buffer = '';
+    req.on('data', function(data) {
+        buffer += decoder.write(data);
+    });
+    req.on('end', function() {
+        buffer += decoder.end();
+        res.end("Hello World\n");
+        console.log('Request received');
+        console.log('Method: ' + method);
+        console.log('Path: ' + trimmedPath);
+        console.log('Query string: ', queryStringObject);
+        console.log('Headers: ', headers);
+        console.log('Buffer: ', buffer);
+    });
 });
 
 server.listen(3000, function() {
