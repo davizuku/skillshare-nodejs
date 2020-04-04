@@ -7,3 +7,5 @@ services:
     working_dir: /usr/app
     volumes:
       - .:/usr/app
+    ports:
+      - "3000:3000"
