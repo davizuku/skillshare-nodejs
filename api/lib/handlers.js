@@ -66,7 +66,7 @@ handlers._users.post = function (data, callback) {
 
 // Required data: phone
 // Optional data: none
-// @TODO Only let authenticated user access their object.
+// @TODO Only let authenticated user access their object. Don't let them get anyone else's
 handlers._users.get = function (data, callback) {
     var phone = typeof (data.queryStringObject.phone) == 'string' && data.queryStringObject.phone.trim().length == 10 ?
         data.queryStringObject.phone :
@@ -85,8 +85,53 @@ handlers._users.get = function (data, callback) {
     }
 };
 
+// Required data: phone
+// Optional data: firstName, lastName, password (at least one must be specified)
+// @TODO only let authenticated users update their own object. Don't let them update anyone else's
 handlers._users.put = function (data, callback) {
-
+    var firstName = typeof (data.payload.firstName) == 'string' && data.payload.firstName.trim().length > 0 ?
+        data.payload.firstName :
+        false;
+    var lastName = typeof (data.payload.lastName) == 'string' && data.payload.lastName.trim().length > 0 ?
+        data.payload.lastName :
+        false;
+    var phone = typeof (data.payload.phone) == 'string' && data.payload.phone.trim().length == 10 ?
+        data.payload.phone :
+        false;
+    var password = typeof (data.payload.password) == 'string' && data.payload.password.trim().length > 0 ?
+        data.payload.password :
+        false;
+    if (phone) {
+        if (firstName || lastName || password) {
+            _data.read('users', phone, function (err, userData) {
+                if (!err && userData) {
+                    if (firstName) {
+                        userData.firstName = firstName;
+                    }
+                    if (lastName) {
+                        userData.lastName = lastName;
+                    }
+                    if (password) {
+                        userData.hashedPassword = helpers.hash(password);
+                    }
+                    _data.update('users', phone, userData, function(err) {
+                        if (!err) {
+                            callback(200);
+                        } else {
+                            console.log(err);
+                            callback(500, {'Error': 'Could not update the user'});
+                        }
+                    })
+                } else {
+                    callback(400, {'Error': 'The specified user does not exist'});
+                }
+            })
+        } else {
+            callback(400, {'Error': 'Missing fields to update'});
+        }
+    } else {
+        callback(400, {'Error': 'Missing required field'});
+    }
 };
 
 handlers._users.delete = function (data, callback) {
