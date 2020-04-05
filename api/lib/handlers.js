@@ -260,10 +260,29 @@ handlers._tokens.put = function (data, callback) {
         callback(400, { 'Error': 'Missing required field(s) or field(s) are invalid' });
     }
 };
-// Required data:
-// Optional data:
+// Required data: id
+// Optional data: none
 handlers._tokens.delete = function (data, callback) {
-
+    var id = typeof (data.queryStringObject.id) == 'string' && data.queryStringObject.id.trim().length == 20 ?
+        data.queryStringObject.id :
+        false;
+    if (id) {
+        _data.read('tokens', id, function (err, tokenData) {
+            if (!err && tokenData) {
+                _data.delete('tokens', id, function (err) {
+                    if (!err) {
+                        callback(200);
+                    } else {
+                        callback(500, { 'Error': 'Could not delete the specified token' });
+                    }
+                });
+            } else {
+                callback(400, { 'Error': 'Could not find the specified token' });
+            }
+        });
+    } else {
+        callback(400, { 'Error': 'Missing required field' })
+    }
 };
 
 handlers.ping = function (data, callback) {
