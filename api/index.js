@@ -5,6 +5,7 @@ const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
 const config = require('./config');
 const fs = require('fs');
+const handlers = require('./lib/handlers');
 
 var httpServer = http.createServer(function (req, res) {
     unifiedServer(req, res);
@@ -60,16 +61,6 @@ var unifiedServer = function (req, res) {
             });
         });
     });
-};
-
-var handlers = {};
-
-handlers.ping = function(data, callback) {
-    callback(200);
-};
-
-handlers.notFound = function(data, callback) {
-    callback(404);
 };
 
 var router = {
