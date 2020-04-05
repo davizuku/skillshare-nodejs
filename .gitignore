@@ -1,3 +1,6 @@
+api/.data/*
+!api/.data/.gitkeep
+
 # Logs
 logs
 *.log
