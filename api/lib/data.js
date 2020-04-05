@@ -33,7 +33,7 @@ lib.create = function(dir, file, data, callback) {
 lib.read = function(dir, file, callback) {
     fs.readFile(lib.baseDir + dir + '/' + file + '.json', 'utf8', function(err, data) {
         if (!err && data) {
-            callback(true, helpers.parseJsonToObject(data));
+            callback(false, helpers.parseJsonToObject(data));
         } else {
             callback(err, data);
         }
