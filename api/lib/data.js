@@ -1,6 +1,6 @@
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 
 var lib = {};
 
