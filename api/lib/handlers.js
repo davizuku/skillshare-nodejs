@@ -161,6 +161,72 @@ handlers._users.delete = function (data, callback) {
     }
 };
 
+handlers.tokens = function (data, callback) {
+    var acceptableMethods = ['post', 'get', 'put', 'delete'];
+    if (acceptableMethods.indexOf(data.method) > -1) {
+        handlers._tokens[data.method](data, callback);
+    } else {
+        callback(405);
+    }
+};
+
+handlers._tokens = {};
+
+// Required data: phone, password
+// Optional data: none
+handlers._tokens.post = function (data, callback) {
+    var phone = typeof (data.payload.phone) == 'string' && data.payload.phone.trim().length == 10 ?
+        data.payload.phone :
+        false;
+    var password = typeof (data.payload.password) == 'string' && data.payload.password.trim().length > 0 ?
+        data.payload.password :
+        false;
+    if (phone && password) {
+        _data.read('users', phone, function (err, userData) {
+            if (!err && userData) {
+                var hashedPassword = helpers.hash(password);
+                if (userData.hashedPassword === hashedPassword) {
+                    var tokenId = helpers.createRandomString(20);
+                    var expires = Date.now() + 1000 * 60 * 60;
+                    var tokenObject = {
+                        'phone': phone,
+                        'id': tokenId,
+                        'expires': expires,
+                    };
+                    _data.create('tokens', tokenId, tokenObject, function(err) {
+                        if (!err) {
+                            callback(200, tokenObject);
+                        } else {
+                            callback(500, {'Error': 'Could not create the new token'});
+                        }
+                    })
+                } else {
+                    callback(400, {'Error': 'Password did not match the specified user\'s stored password'});
+                }
+            } else {
+                callback(400, {'Error': 'Could not find the specified user'});
+            }
+        })
+    } else {
+        callback(400, {'Error': 'Missing required fields'});
+    }
+};
+// Required data:
+// Optional data:
+handlers._tokens.get = function (data, callback) {
+
+};
+// Required data:
+// Optional data:
+handlers._tokens.put = function (data, callback) {
+
+};
+// Required data:
+// Optional data:
+handlers._tokens.delete = function (data, callback) {
+
+};
+
 handlers.ping = function (data, callback) {
     callback(200);
 };
