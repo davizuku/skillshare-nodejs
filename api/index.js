@@ -75,5 +75,5 @@ handlers.notFound = function(data, callback) {
 };
 
 var router = {
-    'sample': handlers.sample
+    'sample': handlers.sample,
 };
