@@ -150,7 +150,6 @@ handlers._users.put = function (data, callback) {
 
 // Required data: phone
 // Optional data: none
-// @TODO Only let authenticated user delete their object. Don't let them delete anyone else's
 // @TODO Cleanup any other data files associated with this user
 handlers._users.delete = function (data, callback) {
     var phone = typeof(data.queryStringObject.phone) == 'string' && data.queryStringObject.phone.trim().length == 10 ?
