@@ -1,5 +1,4 @@
-api/.data/*
-!api/.data/.gitkeep
+api/.data/**/*.json
 
 # Logs
 logs

@@ -6,6 +6,7 @@ const StringDecoder = require('string_decoder').StringDecoder;
 const config = require('./config');
 const fs = require('fs');
 const handlers = require('./lib/handlers');
+const helpers = require('./lib/helpers');
 
 var httpServer = http.createServer(function (req, res) {
     unifiedServer(req, res);
@@ -46,7 +47,7 @@ var unifiedServer = function (req, res) {
             'queryStringObject': queryStringObject,
             'method': method,
             'headers': headers,
-            'payload': buffer,
+            'payload': helpers.parseJsonToObject(buffer),
         };
         chosenHandler(data, function (statusCode, payload) {
             statusCode = typeof (statusCode) !== 'undefined' ? statusCode : 200;
@@ -65,4 +66,5 @@ var unifiedServer = function (req, res) {
 
 var router = {
     'ping': handlers.ping,
+    'users': handlers.users,
 };
