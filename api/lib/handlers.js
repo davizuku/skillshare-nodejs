@@ -398,6 +398,28 @@ handlers._checks.post = function (data, callback) {
 // Required data: id
 // Optional data: none
 handlers._checks.get = function (data, callback) {
+    var id = typeof(data.queryStringObject.id) == 'string' && data.queryStringObject.id.trim().length == 20 ?
+        data.queryStringObject.id :
+        false;
+    if (id) {
+        _data.read('checks', id, function (err, checkData) {
+            if (!err && checkData) {
+                // Token must be in the headers
+                var token = typeof (data.headers.token) == 'string' ? data.headers.token : false;
+                handlers._tokens.verifyToken(token, checkData.userPhone, function (tokenIsValid) {
+                    if (tokenIsValid) {
+                        callback(200, checkData);
+                    } else {
+                        callback(403);
+                    }
+                });
+            } else {
+                callback(404);
+            }
+        });
+    } else {
+        callback(400, { 'Error': 'Missing required field' })
+    }
 };
 // Required data: id, extend
 // Optional data: none
