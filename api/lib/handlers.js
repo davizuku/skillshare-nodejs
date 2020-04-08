@@ -151,7 +151,6 @@ handlers._users.put = function (data, callback) {
 
 // Required data: phone
 // Optional data: none
-// @TODO Cleanup any other data files associated with this user
 handlers._users.delete = function (data, callback) {
     var phone = typeof(data.queryStringObject.phone) == 'string' && data.queryStringObject.phone.trim().length == 10 ?
         data.queryStringObject.phone :
@@ -161,11 +160,33 @@ handlers._users.delete = function (data, callback) {
         var token = typeof(data.headers.token) == 'string' ? data.headers.token : false;
         handlers._tokens.verifyToken(token, phone, function (tokenIsValid) {
             if (tokenIsValid) {
-                _data.read('users', phone, function (err, data) {
-                    if (!err && data) {
+                _data.read('users', phone, function (err, userData) {
+                    if (!err && userData) {
                         _data.delete('users', phone, function (err) {
                             if (!err) {
-                                callback(200);
+                                var userChecks = typeof(userData.checks) == 'object' && userData.checks instanceof Array ? userData.checks : [];
+                                var checksToDelete = userChecks.length;
+                                if (checksToDelete > 0) {
+                                    var checksDeleted = 0;
+                                    var deletionErrors = false;
+                                    userChecks.forEach(function(checkId) {
+                                        _data.delete('checks', checkId, function (err) {
+                                            if (err) {
+                                                deletionErrors = true;
+                                            }
+                                            checksDeleted++;
+                                            if (checksDeleted == checksToDelete) {
+                                                if (!deletionErrors) {
+                                                    callback(200);
+                                                } else {
+                                                    callback(500, {'Error': 'Errors encountered while attempting to delete all of the user\'s checks. All checks may not have been deleted from the system successfully'});
+                                                }
+                                            }
+                                        });
+                                    });
+                                } else {
+                                    callback(200);
+                                }
                             } else {
                                 callback(500, { 'Error': 'Could not delete the specified user' });
                             }
@@ -503,7 +524,7 @@ handlers._checks.delete = function (data, callback) {
                             if (!err) {
                                 _data.read('users', checkData.userPhone, function (err, userData) {
                                     if (!err && userData) {
-                                        var userChecks = typeof (userData.checks) == 'object' && userData.checks instanceof Array ? userData.checks : [];
+                                        var userChecks = typeof(userData.checks) == 'object' && userData.checks instanceof Array ? userData.checks : [];
                                         var checkPosition = userChecks.indexOf(id);
                                         if (checkPosition > -1) {
                                             userChecks.splice(checkPosition, 1);
