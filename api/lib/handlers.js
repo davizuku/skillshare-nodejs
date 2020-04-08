@@ -405,7 +405,7 @@ handlers._checks.get = function (data, callback) {
         _data.read('checks', id, function (err, checkData) {
             if (!err && checkData) {
                 // Token must be in the headers
-                var token = typeof (data.headers.token) == 'string' ? data.headers.token : false;
+                var token = typeof(data.headers.token) == 'string' ? data.headers.token : false;
                 handlers._tokens.verifyToken(token, checkData.userPhone, function (tokenIsValid) {
                     if (tokenIsValid) {
                         callback(200, checkData);
@@ -427,26 +427,26 @@ handlers._checks.put = function (data, callback) {
     var id = typeof(data.payload.id) == 'string' && data.payload.id.trim().length == 20 ?
         data.payload.id.trim() :
         false;
-    var protocol = typeof (data.payload.protocol) == 'string' && ['https', 'http'].indexOf(data.payload.protocol) > -1 ?
+    var protocol = typeof(data.payload.protocol) == 'string' && ['https', 'http'].indexOf(data.payload.protocol) > -1 ?
         data.payload.protocol :
         false;
-    var url = typeof (data.payload.url) == 'string' && data.payload.url.trim().length > 0 ?
+    var url = typeof(data.payload.url) == 'string' && data.payload.url.trim().length > 0 ?
         data.payload.url :
         false;
-    var method = typeof (data.payload.method) == 'string' && ['post', 'get', 'put', 'delete'].indexOf(data.payload.method) > -1 ?
+    var method = typeof(data.payload.method) == 'string' && ['post', 'get', 'put', 'delete'].indexOf(data.payload.method) > -1 ?
         data.payload.method :
         false;
-    var successCodes = typeof (data.payload.successCodes) == 'object' && data.payload.successCodes instanceof Array && data.payload.successCodes.length > 0 ?
+    var successCodes = typeof(data.payload.successCodes) == 'object' && data.payload.successCodes instanceof Array && data.payload.successCodes.length > 0 ?
         data.payload.successCodes :
         false;
-    var timeoutSeconds = typeof (data.payload.timeoutSeconds) == 'number' && data.payload.timeoutSeconds % 1 === 0 && data.payload.timeoutSeconds >= 1 && data.payload.timeoutSeconds <= 5 ?
+    var timeoutSeconds = typeof(data.payload.timeoutSeconds) == 'number' && data.payload.timeoutSeconds % 1 === 0 && data.payload.timeoutSeconds >= 1 && data.payload.timeoutSeconds <= 5 ?
         data.payload.timeoutSeconds :
         false;
     if (id) {
         if (protocol || url || method || successCodes || timeoutSeconds) {
             _data.read('checks', id, function (err, checkData) {
                 if (!err && checkData) {
-                    var token = typeof (data.headers.token) == 'string' ? data.headers.token : false;
+                    var token = typeof(data.headers.token) == 'string' ? data.headers.token : false;
                     handlers._tokens.verifyToken(token, checkData.userPhone, function (tokenIsValid) {
                         if (tokenIsValid) {
                             if (protocol) {
