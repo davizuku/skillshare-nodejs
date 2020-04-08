@@ -489,7 +489,53 @@ handlers._checks.put = function (data, callback) {
 // Required data: id
 // Optional data: none
 handlers._checks.delete = function (data, callback) {
-
+    var id = typeof(data.queryStringObject.id) == 'string' && data.queryStringObject.id.trim().length == 20 ?
+        data.queryStringObject.id.trim() :
+        false;
+    if (id) {
+        _data.read('checks', id, function(err, checkData) {
+            if (!err && checkData) {
+                // Token must be in the headers
+                var token = typeof(data.headers.token) == 'string' ? data.headers.token : false;
+                handlers._tokens.verifyToken(token, checkData.userPhone, function (tokenIsValid) {
+                    if (tokenIsValid) {
+                        _data.delete('checks', id, function (err) {
+                            if (!err) {
+                                _data.read('users', checkData.userPhone, function (err, userData) {
+                                    if (!err && userData) {
+                                        var userChecks = typeof (userData.checks) == 'object' && userData.checks instanceof Array ? userData.checks : [];
+                                        var checkPosition = userChecks.indexOf(id);
+                                        if (checkPosition > -1) {
+                                            userChecks.splice(checkPosition, 1);
+                                            _data.update('users', userData.phone, userData, function (err) {
+                                                if (!err) {
+                                                    callback(200);
+                                                } else {
+                                                    callback(500, { 'Error': 'Could not delete the user' });
+                                                }
+                                            });
+                                        } else {
+                                            callback(500, {'Error': 'Could not find the check on the users object, so could not remove it'});
+                                        }
+                                    } else {
+                                        callback(400, { 'Error': 'Could not find the user who created the check, so could not remove the check from the list of checks on the user object' });
+                                    }
+                                });
+                            } else {
+                                callback(500, {'Error': 'Could not delete the check data'});
+                            }
+                        });
+                    } else {
+                        callback(403);
+                    }
+                });
+            } else {
+                callback(400, {'Error': 'The specified check ID does not exist'});
+            }
+        });
+    } else {
+        callback(400, { 'Error': 'Missing required field' })
+    }
 };
 
 
