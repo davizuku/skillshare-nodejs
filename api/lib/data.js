@@ -38,7 +38,7 @@ lib.read = function(dir, file, callback) {
             callback(err, data);
         }
     });
-}
+};
 
 lib.update = function(dir, file, data, callback) {
     fs.open(lib.baseDir + dir + '/' + file + '.json', 'r+', function (err, fileDescriptor) {
@@ -67,7 +67,7 @@ lib.update = function(dir, file, data, callback) {
             callback('Could not open the file for updating, it may not exist yet')
         }
     });
-}
+};
 
 lib.delete = function (dir, file, callback) {
     fs.unlink(lib.baseDir + dir + '/' + file + '.json', function (err) {
@@ -77,6 +77,6 @@ lib.delete = function (dir, file, callback) {
             callback(err);
         }
     });
-}
+};
 
 module.exports = lib;
