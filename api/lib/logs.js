@@ -29,4 +29,23 @@ lib.append = function (fileName, str, callback) {
     });
 };
 
+lib.list = function(includeCompressedLogs, callback) {
+    fs.readdir(lib.baseDir, function(err, data) {
+        if (!err && data && data.length > 0) {
+            var trimmedFileNames = [];
+            data.forEach(function (fileName) {
+                if (fileName.indexOf('.log') > -1) {
+                    trimmedFileNames.push(fileName.replace('.log', ''));
+                }
+                if (fileName.indexOf('.gz.b64') > -1 && includeCompressedLogs) {
+                    trimmedFileNames.push(fileName.replace('.gz.b64', ''));
+                }
+            });
+            callback(false, trimmedFileNames);
+        } else {
+            callback(err, data);
+        }
+    });
+};
+
 module.exports = lib;
