@@ -6,7 +6,7 @@ const https = require('https');
 const http = require('http');
 const helpers = require('./helpers');
 const url = require('url');
-const _logs = require('./logs')
+const _logs = require('./logs');
 
 var workers = {};
 
@@ -217,6 +217,7 @@ workers.logRotationLoop = function() {
 };
 
 workers.init = function() {
+    console.log('\x1b[33m%s\x1b[0m', 'Background workers are running');
     workers.gatherAllChecks();
     workers.loop();
     workers.rotateLogs();
