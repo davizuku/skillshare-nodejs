@@ -44,7 +44,7 @@ lib.update = function(dir, file, data, callback) {
     fs.open(lib.baseDir + dir + '/' + file + '.json', 'r+', function (err, fileDescriptor) {
         if (!err && fileDescriptor) {
             var stringData = JSON.stringify(data);
-            fs.truncate(fileDescriptor, function (err) {
+            fs.ftruncate(fileDescriptor, function (err) {
                 if (!err) {
                     fs.write(fileDescriptor, stringData, function (err) {
                         if (!err) {
