@@ -103,4 +103,14 @@ lib.decompress = function (fileId, callback) {
     });
 };
 
+lib.truncate = function (logId, callback) {
+    fs.truncate(lib.baseDir + logId + '.log', 0, function (err) {
+        if (!err) {
+            callback(false);
+        } else {
+            callback(err);
+        }
+    });
+};
+
 module.exports = lib;
