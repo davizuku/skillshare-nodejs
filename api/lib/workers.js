@@ -184,9 +184,43 @@ workers.loop = function() {
     }, 1000 * 10);
 };
 
+workers.rotateLogs = function() {
+    _logs.list(false, function(err, logs) {
+        if (!err && logs && logs.length > 0) {
+            logs.forEach(function (logName) {
+                var logId = logName.replace('.log', '');
+                var newFileId = logId + '-' + Date.now();
+                _logs.compress(logId, newFileId, function (err) {
+                    if (!err) {
+                        _logs.truncate(logId, function (err) {
+                            if (!err) {
+                                console.log("Success truncating log file");
+                            } else {
+                                console.log("Error truncating log file");
+                            }
+                        });
+                    } else {
+                        console.log("Error compressing one of the log files", err);
+                    }
+                });
+            });
+        } else {
+            console.log("Error: could not find any logs to rotate");
+        }
+    });
+}
+
+workers.logRotationLoop = function() {
+    setInterval(function(){
+        workers.rotateLogs();
+    }, 1000 * 60 * 60 * 24);
+};
+
 workers.init = function() {
     workers.gatherAllChecks();
     workers.loop();
+    workers.rotateLogs();
+    workers.logRotationLoop();
 };
 
 module.exports = workers;

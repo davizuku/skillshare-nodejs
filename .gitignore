@@ -3,6 +3,7 @@ api/.data/**/*.json
 # Logs
 logs
 *.log
+*.gz.b64
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
