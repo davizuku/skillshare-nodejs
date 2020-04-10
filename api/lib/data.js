@@ -84,7 +84,9 @@ lib.list = function (dir, callback) {
         if (!err && data && data.length > 0) {
             var trimmedFileNames = [];
             data.forEach(function(fileName) {
-                trimmedFileNames.push(fileName.replace('.json', ''));
+                if (fileName.match(/^(.*)\.json$/)) {
+                    trimmedFileNames.push(fileName.replace('.json', ''));
+                }
             });
             callback(false, trimmedFileNames);
         } else {
