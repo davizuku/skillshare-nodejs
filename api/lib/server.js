@@ -7,6 +7,8 @@ const fs = require('fs');
 const handlers = require('./handlers');
 const helpers = require('./helpers');
 const path = require('path');
+const util = require('util');
+var debug = util.debuglog('server');
 
 var server = {};
 
@@ -53,10 +55,11 @@ server.unifiedServer = function (req, res) {
             res.setHeader('Content-Type', 'application/json');
             res.writeHead(statusCode);
             res.end(payloadString);
-            console.log({
-                'request': data,
-                'response': payload,
-            });
+            if (statusCode == 200) {
+                debug('\x1b[32m%s\x1b[0m', method.toUpperCase() + ' /' + trimmedPath + ' ' + statusCode);
+            } else {
+                debug('\x1b[31m%s\x1b[0m', method.toUpperCase() + ' /' + trimmedPath + ' ' + statusCode);
+            }
         });
     });
 };
