@@ -6,6 +6,7 @@ const https = require('https');
 const http = require('http');
 const helpers = require('./helpers');
 const url = require('url');
+const _logs = require('./logs')
 
 var workers = {};
 
@@ -127,10 +128,12 @@ workers.processCheckOutcome = function(checkData, checkOutcome) {
         'up' :
         'down';
     var alertWarranted = checkData.lastChecked && checkData.state != state;
+    var timeOfCheck = Date.now();
+    workers.log(checkData, checkOutcome, state, alertWarranted, timeOfCheck);
+
     var newCheckData = checkData;
     newCheckData.state = state;
-    newCheckData.lastChecked = Date.now();
-
+    newCheckData.lastChecked = timeOfCheck;
     _data.update('checks', newCheckData.id, newCheckData, function (err) {
         if (!err) {
             if (alertWarranted) {
@@ -152,6 +155,25 @@ workers.alertUserToStatusChange = function (checkData) {
             console.log("Success: User was alerted to a status change in their check, via sms: ", msg);
         } else {
             console.log("Error: Could not send sms alert to user who had a state change in their check");
+        }
+    });
+};
+
+workers.log = function(checkData, checkOutcome, state, alertWarranted, timeOfCheck) {
+    var logData = {
+        'check': checkData,
+        'outcome': checkOutcome,
+        'state': state,
+        'alert': alertWarranted,
+        'time': timeOfCheck,
+    };
+    var logString = JSON.stringify(logData);
+    var logFileName = checkData.id;
+    _logs.append(logFileName, logString, function(err) {
+        if (!err) {
+            console.log("Logging to file succeeded");
+        } else {
+            console.log("Logging to file failed");
         }
     });
 };
