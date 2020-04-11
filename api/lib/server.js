@@ -41,6 +41,14 @@ server.unifiedServer = function (req, res) {
         var chosenHandler = typeof (server.router[trimmedPath]) !== 'undefined' ?
             server.router[trimmedPath] :
             handlers.notFound;
+        var allowedHeaders = [
+            'Content-Type',
+            'token',
+        ];
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Headers', allowedHeaders.join(', '));
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        res.setHeader('Allow', 'GET, POST, PUT, DELETE, OPTIONS');
         var data = {
             'trimmedPath': trimmedPath,
             'queryStringObject': queryStringObject,
@@ -49,14 +57,12 @@ server.unifiedServer = function (req, res) {
             'payload': helpers.parseJsonToObject(buffer),
         };
         chosenHandler(data, function (statusCode, payload) {
-            statusCode = typeof (statusCode) !== 'undefined' ? statusCode : 200;
+            statusCode = typeof(statusCode) !== 'undefined' && method !== 'options' ?
+                statusCode :
+                200; // All OPTIONS requests must lead to a 200 status code.
             payload = typeof (payload) === 'object' ? payload : {};
             var payloadString = JSON.stringify(payload);
             res.setHeader('Content-Type', 'application/json');
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
-            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-            res.setHeader('Allow', 'GET, POST, PUT, DELETE');
             res.writeHead(statusCode);
             res.end(payloadString);
             if (statusCode == 200) {
