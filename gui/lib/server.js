@@ -41,6 +41,7 @@ server.unifiedServer = function (req, res) {
         var chosenHandler = typeof (server.router[trimmedPath]) !== 'undefined' ?
             server.router[trimmedPath] :
             handlers.notFound;
+        chosenHandler = trimmedPath.indexOf('public/') > -1 ? handlers.public : chosenHandler;
         var data = {
             'trimmedPath': trimmedPath,
             'queryStringObject': queryStringObject,
@@ -48,10 +49,32 @@ server.unifiedServer = function (req, res) {
             'headers': headers,
             'payload': helpers.parseJsonToObject(buffer),
         };
-        chosenHandler(data, function (statusCode, payload) {
+        chosenHandler(data, function (statusCode, payload, contentType) {
             statusCode = typeof (statusCode) !== 'undefined' ? statusCode : 200;
-            var payloadString = typeof(payload) == 'string' ? payload : '';
-            res.setHeader('Content-Type', 'text/html');
+            contentType = typeof(contentType) == 'string' ? contentType : 'html';
+            var payloadString = '';
+            if (contentType == 'html') {
+                res.setHeader('Content-Type', 'text/html');
+                payloadString = typeof(payload) == 'string' ? payload : '';
+            } else if (contentType == 'favicon') {
+                res.setHeader('Content-Type', 'image/x-icon');
+                payloadString = typeof (payload) !== 'undefined' ? payload : '';
+            } else if (contentType == 'css') {
+                res.setHeader('Content-Type', 'text/css');
+                payloadString = typeof (payload) !== 'undefined' ? payload : '';
+            } else if (contentType == 'js') {
+                res.setHeader('Content-Type', 'text/javascript');
+                payloadString = typeof (payload) !== 'undefined' ? payload : '';
+            } else if (contentType == 'png') {
+                res.setHeader('Content-Type', 'image/png');
+                payloadString = typeof (payload) !== 'undefined' ? payload : '';
+            } else if (contentType == 'jpg') {
+                res.setHeader('Content-Type', 'image/jpg');
+                payloadString = typeof (payload) !== 'undefined' ? payload : '';
+            } else if (contentType == 'plain') {
+                res.setHeader('Content-Type', 'text/plain');
+                payloadString = typeof (payload) !== 'undefined' ? payload : '';
+            }
             res.writeHead(statusCode);
             res.end(payloadString);
             if (statusCode == 200) {
@@ -65,6 +88,8 @@ server.unifiedServer = function (req, res) {
 
 server.router = {
     '': handlers.index,
+    'favicon.ico': handlers.favicon,
+    'public': handlers.public,
     'account/create': handlers.accountCreate,
     'account/edit': handlers.accountEdit,
     'account/deleted': handlers.accountDeleted,
