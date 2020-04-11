@@ -49,11 +49,10 @@ server.unifiedServer = function (req, res) {
             'payload': helpers.parseJsonToObject(buffer),
         };
         chosenHandler(data, function (statusCode, payload) {
-            contentType = typeof(contentType) == 'string' ? contentType : 'json';
+            contentType = typeof (contentType) == 'string' ? contentType : 'json';
             statusCode = typeof (statusCode) !== 'undefined' ? statusCode : 200;
-            payload = typeof (payload) === 'object' ? payload : {};
-            var payloadString = JSON.stringify(payload);
-            res.setHeader('Content-Type', 'application/json');
+            var payloadString = typeof(payload) == 'string' ? payload : '';
+            res.setHeader('Content-Type', 'text/html');
             res.writeHead(statusCode);
             res.end(payloadString);
             if (statusCode == 200) {
@@ -66,13 +65,18 @@ server.unifiedServer = function (req, res) {
 };
 
 server.router = {
-    'ping': handlers.ping,
-    'api/users': handlers.users,
-    'api/tokens': handlers.tokens,
-    'api/checks': handlers.checks,
+    '': handlers.index,
+    'account/create': handlers.accountCreate,
+    'account/edit': handlers.accountEdit,
+    'account/deleted': handlers.accountDeleted,
+    'session/create': handlers.sessionCreate,
+    'session/deleted': handlers.sessionDeleted,
+    'checks/all': handlers.checkList,
+    'checks/create': handlers.checksCreate,
+    'checks/edit': handlers.checksEdit,
 };
 
-server.init = function() {
+server.init = function () {
     server.httpServer.listen(config.httpPort, function () {
         console.log('\x1b[36m%s\x1b[0m', "The server is listening on port " + config.httpPort + " in " + config.envName + " mode");
     });
