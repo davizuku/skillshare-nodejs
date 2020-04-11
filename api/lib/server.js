@@ -49,7 +49,6 @@ server.unifiedServer = function (req, res) {
             'payload': helpers.parseJsonToObject(buffer),
         };
         chosenHandler(data, function (statusCode, payload) {
-            contentType = typeof(contentType) == 'string' ? contentType : 'json';
             statusCode = typeof (statusCode) !== 'undefined' ? statusCode : 200;
             payload = typeof (payload) === 'object' ? payload : {};
             var payloadString = JSON.stringify(payload);
@@ -67,9 +66,9 @@ server.unifiedServer = function (req, res) {
 
 server.router = {
     'ping': handlers.ping,
-    'api/users': handlers.users,
-    'api/tokens': handlers.tokens,
-    'api/checks': handlers.checks,
+    'users': handlers.users,
+    'tokens': handlers.tokens,
+    'checks': handlers.checks,
 };
 
 server.init = function() {
