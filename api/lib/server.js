@@ -72,10 +72,21 @@ server.unifiedServer = function (req, res) {
 };
 
 server.router = {
+    // GUI API
+    '': handlers.index,
+    'account/create': handlers.accountCreate,
+    'account/edit': handlers.accountEdit,
+    'account/deleted': handlers.accountDeleted,
+    'session/create': handlers.sessionCreate,
+    'session/deleted': handlers.sessionDeleted,
+    'checks/all': handlers.checkList,
+    'checks/create': handlers.checksCreate,
+    'checks/edit': handlers.checksEdit,
+    // Raw API
     'ping': handlers.ping,
-    'users': handlers.users,
-    'tokens': handlers.tokens,
-    'checks': handlers.checks,
+    'api/users': handlers.users,
+    'api/tokens': handlers.tokens,
+    'api/checks': handlers.checks,
 };
 
 server.init = function() {
