@@ -48,11 +48,18 @@ server.unifiedServer = function (req, res) {
             'headers': headers,
             'payload': helpers.parseJsonToObject(buffer),
         };
-        chosenHandler(data, function (statusCode, payload) {
+        chosenHandler(data, function (statusCode, payload, contentType) {
+            contentType = typeof(contentType) == 'string' ? contentType : 'json';
             statusCode = typeof (statusCode) !== 'undefined' ? statusCode : 200;
-            payload = typeof (payload) === 'object' ? payload : {};
-            var payloadString = JSON.stringify(payload);
-            res.setHeader('Content-Type', 'application/json');
+            var payloadString = '';
+            if (contentType == 'json') {
+                res.setHeader('Content-Type', 'application/json');
+                payload = typeof (payload) === 'object' ? payload : {};
+                payloadString = JSON.stringify(payload);
+            } else if (contentType == 'html') {
+                res.setHeader('Content-Type', 'text/html');
+                payloadString = typeof(payload) == 'string' ? payload : '';
+            }
             res.writeHead(statusCode);
             res.end(payloadString);
             if (statusCode == 200) {
