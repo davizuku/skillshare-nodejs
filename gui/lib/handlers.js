@@ -4,9 +4,21 @@ var handlers = {};
 
 handlers.index = function (data, callback) {
     if (data.method == 'get') {
-        helpers.getTemplate('index', function (err, str) {
+        var templateData = {
+            'head.title': 'This is the title',
+            'head.description': 'This is the meta description',
+            'body.title': 'Hello templated world',
+            'body.class': 'index',
+        };
+        helpers.getTemplate('index', templateData, function(err, str) {
             if (!err && str) {
-                callback(200, str);
+                helpers.addUniversalTemplates(str, templateData, function (err, str) {
+                    if (!err && str) {
+                        callback(200, str);
+                    } else {
+                        callback(500);
+                    }
+                });
             } else {
                 callback(500);
             }
