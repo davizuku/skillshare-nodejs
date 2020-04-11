@@ -14,7 +14,6 @@ handlers.index = function (data, callback) {
     } else {
         callback(405);
     }
-    callback();
 };
 
 handlers.ping = function (data, callback) {
