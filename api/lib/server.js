@@ -73,10 +73,10 @@ server.router = {
 
 server.init = function() {
     server.httpServer.listen(config.httpPort, function () {
-        console.log('\x1b[36m%s\x1b[0m', "The server is listening on port " + config.httpPort + " in " + config.envName + " mode");
+        console.log('\x1b[36m%s\x1b[0m', "The HTTP server is listening on port " + config.httpPort + " in " + config.envName + " mode");
     });
     server.httpsServer.listen(config.httpsPort, function () {
-        console.log('\x1b[35m%s\x1b[0m', "The server is listening on port " + config.httpsPort + " in " + config.envName + " mode");
+        console.log('\x1b[35m%s\x1b[0m', "The HTTPS server is listening on port " + config.httpsPort + " in " + config.envName + " mode");
     });
 }
 
