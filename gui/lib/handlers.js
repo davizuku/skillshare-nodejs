@@ -2,7 +2,6 @@ const helpers = require('./helpers');
 
 var handlers = {};
 
-// GUI API handlers
 handlers.index = function (data, callback) {
     if (data.method == 'get') {
         helpers.getTemplate('index', function (err, str) {
