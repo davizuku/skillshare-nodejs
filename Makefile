@@ -1,14 +1,19 @@
 .PHONY: run down bash api api-debug gui
 
-run:
+help:		## Show this help.
+	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
+
+run:		## Start the node container
 	@docker-compose up -d
-down:
+down:		## Stop the node container
 	@docker-compose down
-bash:
+
+bash:		## Open a new interactive bash in the node container
 	@docker-compose exec node /bin/bash
-api:
+
+api:		## Start the API service
 	@docker-compose exec node /usr/local/bin/node api
-api-debug:
+api-debug:	## Start the API service in debug mode
 	@docker-compose exec -e NODE_DEBUG=workers,server node /usr/local/bin/node api
-gui:
+gui:		## Start the GUI service
 	@docker-compose exec node /usr/local/bin/node gui
