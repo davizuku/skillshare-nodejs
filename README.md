@@ -16,3 +16,15 @@ _Enter_ docker using:
 ```
 make bash
 ```
+
+## Start the API:
+
+Once the docker is running. Start the API running:
+
+```
+make api-start
+```
+or
+```
+make api-start-debug
+```
