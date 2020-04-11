@@ -19,12 +19,20 @@ make bash
 
 ## Start the API:
 
-Once the docker is running. Start the API running:
+Once the docker is running. Start the API executing one of the following commands:
 
 ```
-make api-start
+make api
 ```
 or
 ```
-make api-start-debug
+make api-debug
+```
+
+## Start the GUI:
+
+Once the API is running. Start the GUI executing the following command:
+
+```
+make gui
 ```
