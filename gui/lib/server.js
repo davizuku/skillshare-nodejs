@@ -49,7 +49,6 @@ server.unifiedServer = function (req, res) {
             'payload': helpers.parseJsonToObject(buffer),
         };
         chosenHandler(data, function (statusCode, payload) {
-            contentType = typeof (contentType) == 'string' ? contentType : 'json';
             statusCode = typeof (statusCode) !== 'undefined' ? statusCode : 200;
             var payloadString = typeof(payload) == 'string' ? payload : '';
             res.setHeader('Content-Type', 'text/html');
