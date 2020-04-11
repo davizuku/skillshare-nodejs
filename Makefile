@@ -8,3 +8,5 @@ api-start:
 	@docker-compose exec node /usr/local/bin/node api
 api-start-debug:
 	@docker-compose exec -e NODE_DEBUG=workers,server node /usr/local/bin/node api
+gui-start:
+	@docker-compose exec node /usr/local/bin/node gui

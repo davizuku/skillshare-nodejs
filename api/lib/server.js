@@ -17,8 +17,8 @@ server.httpServer = http.createServer(function (req, res) {
 });
 
 server.httpsServerOptions = {
-    'key': fs.readFileSync(path.join(__dirname, '/../https/key.pem')),
-    'cert': fs.readFileSync(path.join(__dirname, '/../https/cert.pem')),
+    'key': fs.readFileSync(path.join(__dirname, '/../../https/key.pem')),
+    'cert': fs.readFileSync(path.join(__dirname, '/../../https/cert.pem')),
 };
 server.httpsServer = https.createServer(server.httpsServerOptions, function (req, res) {
     server.unifiedServer(req, res);
