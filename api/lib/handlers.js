@@ -559,7 +559,6 @@ handlers._checks.delete = function (data, callback) {
     }
 };
 
-
 handlers.ping = function (data, callback) {
     var code = typeof(data.queryStringObject.code) == 'string' ?
         data.queryStringObject.code :
