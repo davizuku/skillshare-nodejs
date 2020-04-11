@@ -31,8 +31,12 @@ make api-debug
 
 ## Start the GUI:
 
-Once the API is running. Start the GUI executing the following command:
+Once the API is running. Start the GUI executing one of the following commands:
 
 ```
 make gui
+```
+or
+```
+make gui-debug
 ```
