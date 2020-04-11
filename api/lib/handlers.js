@@ -561,7 +561,10 @@ handlers._checks.delete = function (data, callback) {
 
 
 handlers.ping = function (data, callback) {
-    callback(200);
+    var code = typeof(data.queryStringObject.code) == 'string' ?
+        data.queryStringObject.code :
+        200;
+    callback(code);
 };
 
 handlers.notFound = function (data, callback) {
