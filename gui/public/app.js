@@ -15,7 +15,7 @@ app.client.request = function (headers, path, method, queryStringObject, payload
     queryStringObject = typeof (queryStringObject) == 'object' && queryStringObject !== null ? queryStringObject : {};
     payload = typeof (payload) == 'object' && payload !== null ? payload : {};
     callback = typeof (callback) == 'function' ? callback : false;
-    var requestUrl = path.replace(/^[a-z]{4,5}\:\/{2}[a-z]{1,}\:[0-9]{1,4}.(.*)/, app.config.apiHost + '/$1?');
+    var requestUrl = app.config.apiHost + path.replace(/^[a-z]{4,5}\:\/{2}[a-z]{1,}\:[0-9]{1,4}.(.*)/, '/$1') + '?';
     var counter = 0;
     for (var queryKey in queryStringObject) {
         if (queryStringObject.hasOwnProperty(queryKey)) {
