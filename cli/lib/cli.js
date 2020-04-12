@@ -51,7 +51,65 @@ e.on('more log info', function (str) {
 cli.responders = {};
 
 cli.responders.help = function() {
-    console.log('You asked for help');
+    var commands = {
+        'exit': 'Kill the CLI application',
+        'man': 'Show this help page',
+        'help': 'Alias of the "man" command',
+        'stats': 'Get statistics on the underlying operating system and resource utilization',
+        'list users': 'Show a list of all the registered (undeleted) users in the system',
+        'more user info --{userId}': 'Show details of a specific user',
+        'list checks --up --down': 'Show a list of all the active checks in the system, including their state. The "--up" and the "--down" flags are both optional. ',
+        'more check info --{checkId}': 'Show details of a specified check',
+        'list logs': 'Show a list of all the log files available to be read (compressed and uncompressed)',
+        'more log info --{fileName}': 'Show details of a specified log file',
+    };
+    cli.horizontalLine();
+    cli.centered('CLI MANUAL');
+    cli.horizontalLine();
+    cli.verticalSpace(2);
+    for (var key in commands) {
+        if (commands.hasOwnProperty(key)) {
+            var value = commands[key];
+            var line = '\x1b[33m' + key + '\x1b[0m';
+            var padding = 60 - line.length;
+            for (var i = 0; i < padding; i++) {
+                line += ' ';
+            }
+            line += value;
+            console.log(line);
+            cli.verticalSpace();
+        }
+    }
+    cli.verticalSpace(1);
+    cli.horizontalLine();
+};
+
+cli.verticalSpace = function(lines) {
+    lines = typeof(lines) == 'number' && lines > 0 ? lines : 1;
+    for (var i = 0; i < lines; i++) {
+        console.log('');
+    }
+};
+
+cli.horizontalLine = function() {
+    var width = process.stdout.columns;
+    var line = '';
+    for (var i = 0; i < width; ++i) {
+        line += '-';
+    }
+    console.log(line);
+};
+
+cli.centered = function (str) {
+    str = typeof(str) == 'string' && str.trim().length > 0 ? str.trim() : '';
+    var width = process.stdout.columns;
+    var leftPadding = Math.floor((width - str.length)/2);
+    var line = '';
+    for (var i = 0; i < leftPadding; ++i) {
+        line += ' ';
+    }
+    line += str;
+    console.log(line);
 };
 
 cli.responders.exit = function() {
