@@ -8,6 +8,84 @@ var e = new _events();
 
 var cli = {};
 
+e.on('man', function(str) {
+    cli.responders.help();
+});
+
+e.on('help', function(str) {
+    cli.responders.help();
+});
+
+e.on('exit', function(str) {
+    cli.responders.exit();
+});
+
+e.on('stats', function(str) {
+    cli.responders.stats();
+});
+
+e.on('list users', function (str) {
+    cli.responders.listUsers();
+});
+
+e.on('more user info', function (str) {
+    cli.responders.moreUserInfo(str);
+});
+
+e.on('list checks', function (str) {
+    cli.responders.listChecks(str);
+});
+
+e.on('more check info', function (str) {
+    cli.responders.moreCheckInfo(str);
+});
+
+e.on('list logs', function (str) {
+    cli.responders.listLogs();
+});
+
+e.on('more log info', function (str) {
+    cli.responders.moreLogInfo(str);
+});
+
+cli.responders = {};
+
+cli.responders.help = function() {
+    console.log('You asked for help');
+};
+
+cli.responders.exit = function() {
+    console.log('You asked for exit');
+};
+
+cli.responders.stats = function() {
+    console.log('You asked for stats');
+};
+
+cli.responders.listUsers = function() {
+    console.log('You asked to list users');
+};
+
+cli.responders.moreUserInfo = function(str) {
+    console.log('You asked for more user info', str);
+};
+
+cli.responders.listChecks = function(str) {
+    console.log('You asked to list checks', str);
+};
+
+cli.responders.moreCheckInfo = function(str) {
+    console.log('You asked for more check info', str);
+};
+
+cli.responders.listLogs = function() {
+    console.log('You asked to list logs');
+};
+
+cli.responders.moreLogInfo = function(str) {
+    console.log('You asked for more log info', str);
+};
+
 cli.processInput = function(str) {
     str = typeof(str) == 'string' && str.trim().length > 0 ? str.trim() : false;
     if (str) {
