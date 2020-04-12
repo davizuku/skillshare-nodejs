@@ -1,4 +1,4 @@
-.PHONY: run down bash api api-debug gui clean
+.PHONY: run down bash api api-debug gui cli clean
 
 help:		## Show this help.
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
@@ -19,6 +19,10 @@ gui:		## Start the GUI service
 	@docker-compose exec node /usr/local/bin/node gui
 gui-debug:	## Start the GUI service in debug mode
 	@docker-compose exec -e NODE_DEBUG=server node /usr/local/bin/node gui
+cli:		## Start the CLI service
+	@docker-compose exec node /usr/local/bin/node cli
+cli-debug:	## Start the CLI service in debug mode
+	@docker-compose exec -e NODE_DEBUG=cli node /usr/local/bin/node cli
 
 clean:		## Clean all the data created by API service
 	@rm -f api/.{data,logs}/**.{json,log,gz.b64}

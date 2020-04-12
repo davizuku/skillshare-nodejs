@@ -40,3 +40,15 @@ or
 ```
 make gui-debug
 ```
+
+## Start the CLI:
+
+Once the API is running. Start the CLI executing one of the following commands:
+
+```
+make cli
+```
+or
+```
+make cli-debug
+```
