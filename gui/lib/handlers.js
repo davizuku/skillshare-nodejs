@@ -52,6 +52,31 @@ handlers.accountCreate = function (data, callback) {
     }
 };
 
+handlers.sessionCreate = function (data, callback) {
+    if (data.method == 'get') {
+        var templateData = {
+            'head.title': 'Login to your Account',
+            'head.description': 'Please enter your phone number and password to access your account',
+            'body.class': 'sessionCreate',
+        };
+        helpers.getTemplate('sessionCreate', templateData, function (err, str) {
+            if (!err && str) {
+                helpers.addUniversalTemplates(str, templateData, function (err, str) {
+                    if (!err && str) {
+                        callback(200, str, 'html');
+                    } else {
+                        callback(500);
+                    }
+                });
+            } else {
+                callback(500);
+            }
+        });
+    } else {
+        callback(405);
+    }
+};
+
 handlers.favicon = function (data, callback) {
     if (data.method == 'get') {
         helpers.getStaticAsset('favicon.ico', function (err, data) {
