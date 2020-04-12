@@ -102,6 +102,30 @@ handlers.sessionDeleted = function (data, callback) {
     }
 };
 
+handlers.accountEdit = function (data, callback) {
+    if (data.method == 'get') {
+        var templateData = {
+            'head.title': 'Account Settings',
+            'body.class': 'accountEdit',
+        };
+        helpers.getTemplate('accountEdit', templateData, function (err, str) {
+            if (!err && str) {
+                helpers.addUniversalTemplates(str, templateData, function (err, str) {
+                    if (!err && str) {
+                        callback(200, str, 'html');
+                    } else {
+                        callback(500);
+                    }
+                });
+            } else {
+                callback(500);
+            }
+        });
+    } else {
+        callback(405);
+    }
+};
+
 handlers.favicon = function (data, callback) {
     if (data.method == 'get') {
         helpers.getStaticAsset('favicon.ico', function (err, data) {
