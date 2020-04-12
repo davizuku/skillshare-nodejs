@@ -5,9 +5,8 @@ var handlers = {};
 handlers.index = function (data, callback) {
     if (data.method == 'get') {
         var templateData = {
-            'head.title': 'This is the title',
-            'head.description': 'This is the meta description',
-            'body.title': 'Hello templated world',
+            'head.title': 'Uptime Monitoring - Made Simple',
+            'head.description': 'We offer free, simple uptime monitoring for HTTP/HTTPS sites of all kinds. When your site goes down, we\'ll send you a text to let you know',
             'body.class': 'index',
         };
         helpers.getTemplate('index', templateData, function(err, str) {
