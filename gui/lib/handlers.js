@@ -27,6 +27,31 @@ handlers.index = function (data, callback) {
     }
 };
 
+handlers.accountCreate = function (data, callback) {
+    if (data.method == 'get') {
+        var templateData = {
+            'head.title': 'Create an Account',
+            'head.description': 'Sign up is easy and only takes a few seconds',
+            'body.class': 'accountCreate',
+        };
+        helpers.getTemplate('accountCreate', templateData, function (err, str) {
+            if (!err && str) {
+                helpers.addUniversalTemplates(str, templateData, function (err, str) {
+                    if (!err && str) {
+                        callback(200, str, 'html');
+                    } else {
+                        callback(500);
+                    }
+                });
+            } else {
+                callback(500);
+            }
+        });
+    } else {
+        callback(405);
+    }
+};
+
 handlers.favicon = function (data, callback) {
     if (data.method == 'get') {
         helpers.getStaticAsset('favicon.ico', function (err, data) {
