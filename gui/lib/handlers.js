@@ -77,6 +77,31 @@ handlers.sessionCreate = function (data, callback) {
     }
 };
 
+handlers.sessionDeleted = function (data, callback) {
+    if (data.method == 'get') {
+        var templateData = {
+            'head.title': 'Logged Out',
+            'head.description': 'You have been logged out of your account',
+            'body.class': 'sessionDeleted',
+        };
+        helpers.getTemplate('sessionDeleted', templateData, function (err, str) {
+            if (!err && str) {
+                helpers.addUniversalTemplates(str, templateData, function (err, str) {
+                    if (!err && str) {
+                        callback(200, str, 'html');
+                    } else {
+                        callback(500);
+                    }
+                });
+            } else {
+                callback(500);
+            }
+        });
+    } else {
+        callback(405);
+    }
+};
+
 handlers.favicon = function (data, callback) {
     if (data.method == 'get') {
         helpers.getStaticAsset('favicon.ico', function (err, data) {
