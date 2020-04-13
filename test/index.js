@@ -1,4 +1,7 @@
 
+// Force ENV VARs
+process.env.NODE_ENV = 'testing';
+
 var _app = {};
 
 _app.tests = {};
