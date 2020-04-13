@@ -6,6 +6,10 @@ const querystring = require('querystring');
 
 var helpers = {};
 
+helpers.getANumber = function() {
+    return 1;
+};
+
 helpers.hash = function (str) {
     if (typeof(str) == 'string' && str.length > 0) {
         return crypto.createHmac('sha256', config.hashingSecret).update(str).digest('hex');

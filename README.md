@@ -63,3 +63,11 @@ make example-debugger
 Once in the debugger try out `cont`, `repl` commands.
 
 More info: https://nodejs.org/dist/latest-v12.x/docs/api/debugger.html#debugger_command_reference
+
+## Test the application
+
+To execute the tests just run:
+
+```
+make test
+```

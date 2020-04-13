@@ -1,4 +1,4 @@
-.PHONY: run down bash api api-debug gui cli example-debugger clean
+.PHONY: run down bash api api-debug gui cli example-debugger test clean
 
 help:		## Show this help.
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
@@ -23,6 +23,8 @@ cli:		## Start the CLI service
 	@docker-compose exec node /usr/local/bin/node cli
 cli-debug:	## Start the CLI service in debug mode
 	@docker-compose exec -e NODE_DEBUG=cli node /usr/local/bin/node cli
+test:	## Start the CLI service in debug mode
+	@docker-compose exec node /usr/local/bin/node test
 
 example-debugger:	## Start the API index-debug demonstration using debugger package
 	@docker-compose exec node /usr/local/bin/node inspect api/index-debug.js
