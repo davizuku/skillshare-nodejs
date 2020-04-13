@@ -8,6 +8,7 @@ const events = require('events');
 class _events extends events{};
 var e = new _events();
 const _data = require('./../../api/lib/data');
+const _logs = require('./../../api/lib/logs');
 
 var cli = {};
 
@@ -63,7 +64,7 @@ cli.responders.help = function() {
         'more user info --{userId}': 'Show details of a specific user',
         'list checks --up --down': 'Show a list of all the active checks in the system, including their state. The "--up" and the "--down" flags are both optional. ',
         'more check info --{checkId}': 'Show details of a specified check',
-        'list logs': 'Show a list of all the log files available to be read (compressed and uncompressed)',
+        'list logs': 'Show a list of all the log files available to be read (compressed only)',
         'more log info --{fileName}': 'Show details of a specified log file',
     };
     cli.horizontalLine();
@@ -229,7 +230,18 @@ cli.responders.moreCheckInfo = function(str) {
 };
 
 cli.responders.listLogs = function() {
-    console.log('You asked to list logs');
+    _logs.list(true, function (err, logFileNames) {
+        if (!err && logFileNames && logFileNames.length > 0) {
+            cli.verticalSpace();
+            logFileNames.forEach(function (logFileName) {
+                if (logFileName.indexOf('-') > -1) {
+                    // Compressed logs contain '-' in their names
+                    console.log(logFileName);
+                    cli.verticalSpace();
+                }
+            });
+        }
+    });
 };
 
 cli.responders.moreLogInfo = function(str) {
