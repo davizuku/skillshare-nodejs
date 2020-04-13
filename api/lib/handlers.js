@@ -559,6 +559,11 @@ handlers._checks.delete = function (data, callback) {
     }
 };
 
+handlers.exampleError = function (data, callback) {
+    var err = new Error('This is an example error');
+    throw(err);
+};
+
 handlers.ping = function (data, callback) {
     var code = typeof(data.queryStringObject.code) == 'string' ?
         data.queryStringObject.code :
