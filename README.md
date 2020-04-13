@@ -10,6 +10,8 @@ My goal was to have a demo of different types of product that can be done with N
 - Web-based GUI using templates (`gui`)
 - Command Line Interface REPL program (`cli`)
 
+Check `misc` folder for extra examples on other Node.js modules.
+
 ## Start working
 
 Start docker running node image:
