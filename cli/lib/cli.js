@@ -175,7 +175,18 @@ cli.responders.listUsers = function() {
 };
 
 cli.responders.moreUserInfo = function(str) {
-    console.log('You asked for more user info', str);
+    var arr = str.split('--');
+    var userId = typeof(arr[1]) == 'string' && arr[1].trim().length > 0 ? arr[1].trim() : false;
+    if (userId) {
+        _data.read('users', userId, function (err, userData) {
+            if (!err && userData) {
+                delete userData.hashedPassword;
+                cli.verticalSpace();
+                console.dir(userData, {'colors': true});
+                cli.verticalSpace();
+            }
+        });
+    }
 };
 
 cli.responders.listChecks = function(str) {
