@@ -1,30 +1,9 @@
 
-const apiHelpers = require('./../api/lib/helpers');
-const assert = require('assert');
-
 var _app = {};
 
-_app.tests = {
-    'unit': {},
-};
+_app.tests = {};
 
-_app.tests.unit['helpers.getANumber should return a number'] = function(done) {
-    var val = apiHelpers.getANumber();
-    assert.equal(typeof(val), 'number');
-    done();
-};
-
-_app.tests.unit['helpers.getANumber should return 1'] = function(done) {
-    var val = apiHelpers.getANumber();
-    assert.equal(val, 1);
-    done();
-};
-
-_app.tests.unit['helpers.getANumber should return 2'] = function(done) {
-    var val = apiHelpers.getANumber();
-    assert.equal(val, 2);
-    done();
-};
+_app.tests.unit = require('./unit');
 
 _app.countTests = function() {
     var counter = 0;
