@@ -52,3 +52,14 @@ or
 ```
 make cli-debug
 ```
+
+## Debugger example
+
+Execute this command to start up the debugger:
+```
+make example-debugger
+```
+
+Once in the debugger try out `cont`, `repl` commands.
+
+More info: https://nodejs.org/dist/latest-v12.x/docs/api/debugger.html#debugger_command_reference
