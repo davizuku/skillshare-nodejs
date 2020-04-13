@@ -190,7 +190,28 @@ cli.responders.moreUserInfo = function(str) {
 };
 
 cli.responders.listChecks = function(str) {
-    console.log('You asked to list checks', str);
+    var lowerString = str.toLowerCase();
+    _data.list('checks', function(err, checkIds) {
+        if (!err && checkIds && checkIds.length > 0) {
+            cli.verticalSpace();
+            checkIds.forEach(function (checkId) {
+                _data.read('checks', checkId, function (err, checkData) {
+                    if (!err && checkData) {
+                        var state = typeof(checkData.state) == 'string' ? checkData.state : 'down';
+                        var stateOrUnknown = typeof(checkData.state) == 'string' ? checkData.state : 'unknown';
+                        if (lowerString.indexOf('--'+state) > -1 ||
+                            (lowerString.indexOf('--down') == -1 && lowerString.indexOf('--up') == -1)
+                        ) {
+                            var line = 'ID: ' + checkData.id + ' ' + checkData.method.toUpperCase() + ' ';
+                            line += checkData.protocol + '://' + checkData.url + ' State: ' + stateOrUnknown;
+                            console.log(line);
+                            cli.verticalSpace();
+                        }
+                    }
+                });
+            });
+        }
+    });
 };
 
 cli.responders.moreCheckInfo = function(str) {
