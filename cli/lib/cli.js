@@ -215,7 +215,17 @@ cli.responders.listChecks = function(str) {
 };
 
 cli.responders.moreCheckInfo = function(str) {
-    console.log('You asked for more check info', str);
+    var arr = str.split('--');
+    var checkId = typeof(arr[1]) == 'string' && arr[1].trim().length > 0 ? arr[1].trim() : false;
+    if (checkId) {
+        _data.read('checks', checkId, function (err, checkData) {
+            if (!err && checkData) {
+                cli.verticalSpace();
+                console.dir(checkData, {'colors': true});
+                cli.verticalSpace();
+            }
+        });
+    }
 };
 
 cli.responders.listLogs = function() {
