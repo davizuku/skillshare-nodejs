@@ -9,6 +9,7 @@ class _events extends events{};
 var e = new _events();
 const _data = require('./../../api/lib/data');
 const _logs = require('./../../api/lib/logs');
+const helpers = require('./../../api/lib/helpers');
 
 var cli = {};
 
@@ -245,7 +246,23 @@ cli.responders.listLogs = function() {
 };
 
 cli.responders.moreLogInfo = function(str) {
-    console.log('You asked for more log info', str);
+    var arr = str.split('--');
+    var logFileName = typeof (arr[1]) == 'string' && arr[1].trim().length > 0 ? arr[1].trim() : false;
+    if (logFileName) {
+        cli.verticalSpace();
+        _logs.decompress(logFileName, function (err, strData) {
+            if (!err && strData) {
+                var arr = strData.split('\n');
+                arr.forEach(function (jsonString) {
+                    var logObject = helpers.parseJsonToObject(jsonString);
+                    if (logObject && JSON.stringify(logObject) !== '{}') {
+                        console.dir(logObject, {'colors': true});
+                        cli.verticalSpace();
+                    }
+                });
+            }
+        });
+    }
 };
 
 cli.processInput = function(str) {
