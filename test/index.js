@@ -7,6 +7,7 @@ var _app = {};
 _app.tests = {};
 
 _app.tests.unit = require('./unit');
+_app.tests.api = require('./api');
 
 _app.countTests = function() {
     var counter = 0;
@@ -84,7 +85,8 @@ _app.produceTestReport = function (limit, successes, errors) {
     }
     console.log('');
     console.log('-----------END TEST REPORT------------');
-
+    // Stop the API that was started in API tests.
+    process.exit(0);
 };
 
 _app.runTests();

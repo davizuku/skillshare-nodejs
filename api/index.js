@@ -4,11 +4,16 @@ const workers = require('./lib/workers');
 
 var app = {};
 
-app.init = function() {
+app.init = function(callback) {
     server.init();
     workers.init();
+    // In the original code, CLI is started here using a setTimeout.
+    callback();
 };
 
-app.init();
+// Self invoke only if required directly
+if (require.main === module) {
+    app.init(function(){});
+}
 
 module.exports = app;
