@@ -3,6 +3,13 @@ Repository for the Node.js Master Class course at Skillshare.com. This repositor
 
 Check out the repository for the course: https://github.com/pirple/The-NodeJS-Master-Class
 
+The original code for this course contains all three products under the same `app` folder. While coding along the instructor, I have decided to split my code into the three different folders. This has implied duplicating _some_ of the code, but that can be easily refactored.
+
+My goal was to have a demo of different types of product that can be done with Node.js:
+- HTTP API (`api`)
+- Web-based GUI using templates (`gui`)
+- Command Line Interface REPL program (`cli`)
+
 ## Start working
 
 Start docker running node image:
