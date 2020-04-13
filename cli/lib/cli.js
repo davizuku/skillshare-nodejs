@@ -10,6 +10,7 @@ var e = new _events();
 const _data = require('./../../api/lib/data');
 const _logs = require('./../../api/lib/logs');
 const helpers = require('./../../api/lib/helpers');
+const childProcess = require('child_process');
 
 var cli = {};
 
@@ -231,17 +232,18 @@ cli.responders.moreCheckInfo = function(str) {
 };
 
 cli.responders.listLogs = function() {
-    _logs.list(true, function (err, logFileNames) {
-        if (!err && logFileNames && logFileNames.length > 0) {
-            cli.verticalSpace();
-            logFileNames.forEach(function (logFileName) {
-                if (logFileName.indexOf('-') > -1) {
-                    // Compressed logs contain '-' in their names
-                    console.log(logFileName);
-                    cli.verticalSpace();
-                }
-            });
-        }
+    var ls = childProcess.spawn('ls', [__dirname + '/../../api/.logs']);
+    ls.stdout.on('data', function (dataObj) {
+        var dataStr = dataObj.toString();
+        var logFileNames = dataStr.split('\n');
+        cli.verticalSpace();
+        logFileNames.forEach(function (logFileName) {
+            if (typeof(logFileName) == 'string' && logFileName.length > 0 && logFileName.indexOf('-') > -1) {
+                // Compressed logs contain '-' in their names
+                console.log(logFileName.trim().replace('.gz.b64', ''));
+                cli.verticalSpace();
+            }
+        });
     });
 };
 
