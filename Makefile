@@ -14,7 +14,7 @@ bash:		## Open a new interactive bash in the node container
 api:		## Start the API service
 	@docker-compose exec node /usr/local/bin/node api
 api-debug:	## Start the API service in debug mode
-	@docker-compose exec -e NODE_DEBUG=workers,server node /usr/local/bin/node api
+	@docker-compose exec -e NODE_DEBUG=workers,server,performance node /usr/local/bin/node api
 gui:		## Start the GUI service
 	@docker-compose exec node /usr/local/bin/node gui
 gui-debug:	## Start the GUI service in debug mode
